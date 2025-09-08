@@ -25,6 +25,15 @@ def flatten(s):
     [[1, [1, [1, [1, 1, [1, 1, [1]]]], 1]]]
     """
     "*** YOUR CODE HERE ***"
+    ans = []
+    def cur(s):
+        for i in range(len(s)):
+            if type(s[i]) == int:
+                ans.append(s[i])
+            else:
+                cur(s[i])
+    cur(s)
+    return ans
 
 
 def my_map(fn, seq):
@@ -39,7 +48,7 @@ def my_map(fn, seq):
     2023
     [None, None, None]
     """
-    return ______
+    return [fn(x) for x in seq]
 
 
 def my_filter(pred, seq):
@@ -58,7 +67,7 @@ def my_filter(pred, seq):
     >>> my_filter(lambda x: max(5, x) == 5, [1, 2, 3, 4, 5, 6, 7])
     [1, 2, 3, 4, 5]
     """
-    return ______
+    return [x for x in seq if pred(x)]
 
 
 def my_reduce(combiner, seq):
@@ -74,7 +83,13 @@ def my_reduce(combiner, seq):
     11
     """
     "*** YOUR CODE HERE ***"
-
+    if len(seq) == 1:
+        return seq[0]
+    else:
+        tmp = seq[0]
+        for i in range(1, len(seq)):
+            tmp = combiner(tmp, seq[i])
+        return tmp
 
 def my_map_syntax_check():
     """Check that your two_of_three code consists of nothing but a return statement.
@@ -113,6 +128,7 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    return sqrt((get_lat(city_a)-get_lat(city_b))**2 + (get_lon(city_a)-get_lon(city_b))**2)
 
 
 def closer_city(lat, lon, city_a, city_b):
@@ -131,6 +147,13 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    tmp = make_city('tmp', lat, lon)
+    at = distance(tmp, city_a)
+    bt = distance(tmp, city_b)
+    if at < bt:
+        return get_name(city_a)
+    else:
+        return get_name(city_b)
 
 
 def check_city_abstraction():
@@ -221,7 +244,8 @@ def count_palindromes(L):
     >>> count_palindromes(("Acme", "Madam", "Pivot", "Pip"))
     2
     """
-    return ______
+    return sum(s.lower() == s[::-1].lower() for s in L)
+
 
 
 def coords(fn, seq, lower, upper):
@@ -232,7 +256,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[x, fn(x)] for x in seq if fn(x) >= lower and fn(x) <= upper]
 
 
 def change_abstraction(change):
